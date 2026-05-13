@@ -4,4 +4,4 @@ from pydantic import BaseModel, EmailStr
 class UserCreate(BaseModel):
     name: str
     email: EmailStr
-    phone: int
+    phone: str
