@@ -25,7 +25,6 @@ Possíveis melhorias:
     name: str
     email: str
     phone: str
-    activity: datetime
 
 
 # Pré-requisitos:
