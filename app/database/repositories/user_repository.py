@@ -26,19 +26,10 @@ def get_user_by_id_repo(db, id):
     return user
 
 
+def update_user(db, user, update_data: dict):
 
-def update_user_repo(db, id, user_data):
-
-    user = get_user_by_id_repo(db=db, id=id)
-
-    if user_data.name:
-        user.nome = user_data.name
-
-    if user_data.email:
-        user.email = user_data.email
-
-    if user_data.phone:
-        user.phone = user_data.phone
+    for key, value in update_data.items():
+        setattr(user, key, value)
 
     db.commit()
     db.refresh(user)

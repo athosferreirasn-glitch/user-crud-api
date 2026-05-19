@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 
 class UserCreate(BaseModel):
@@ -8,6 +9,6 @@ class UserCreate(BaseModel):
 
 
 class UserData(BaseModel):
-    name: str
-    email: EmailStr
-    phone: str
+    name: str | None = None
+    email: EmailStr | None = None
+    phone: str | None = None
