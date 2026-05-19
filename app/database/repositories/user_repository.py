@@ -26,7 +26,7 @@ def get_user_by_id_repo(db, id):
     return user
 
 
-def update_user(db, user, update_data: dict):
+def update_user_repo(db, user, update_data: dict):
 
     for key, value in update_data.items():
         setattr(user, key, value)
@@ -35,3 +35,14 @@ def update_user(db, user, update_data: dict):
     db.refresh(user)
 
     return user
+
+
+
+def delete_user_repo(db, delete_data):
+
+    if delete_data:
+        db.delete(delete_data)
+
+        db.commit()
+
+        return delete_data

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from app.services.user_service import create_user_service, update_user_service
+from app.services.user_service import create_user_service, update_user_service, delete_user_service
 from app.schemas.user_schemas import UserCreate, UserData
 from app.database.connection import get_db
 from sqlalchemy.orm import Session
@@ -17,7 +17,7 @@ def create_user_router(
 
 
 @router.patch('/update_user/{id_user}')
-def update_user(
+def update_user_router(
     id_user: int,
     user_data: UserData,
     db: Session = Depends(get_db)
@@ -25,3 +25,13 @@ def update_user(
 
 
     return update_user_service(db=db, id_user=id_user, user_data=user_data)
+
+
+
+@router.delete('/delete_user/{user_id}')
+def delete_user_router(
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+
+    return delete_user_service(db=db, user_id=user_id)

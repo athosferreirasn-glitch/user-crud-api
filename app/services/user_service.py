@@ -1,7 +1,9 @@
 from fastapi import HTTPException
 from app.utils.validators import validator_number
-from app.database.repositories.user_repository import get_user_by_id_repo, update_user
-
+from app.database.repositories.user_repository import (
+    get_user_by_id_repo, 
+    update_user_repo,
+    delete_user_repo)
 
 def create_user_service(db, user):
 
@@ -21,10 +23,23 @@ def update_user_service(db, id_user, user_data):
     if not update_data:
         raise HTTPException(status_code=400, detail='Nenhum dado enviado')
 
-    updated_user = update_user(
+    updated_user = update_user_repo(
         db=db,
         user=user,
         update_data=update_data
     )
 
     return updated_user
+
+
+
+def delete_user_service(db, user_id):
+
+    delete_data = get_user_by_id_repo(db=db, id=user_id)
+
+    if not delete_data:
+        raise HTTPException(status_code=400, detail='Nenhum dado enviado')
+
+    user_delete_data = delete_user_repo(db=db, delete_data=delete_data)
+
+    return user_delete_data
