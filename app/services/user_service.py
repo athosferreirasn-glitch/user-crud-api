@@ -3,7 +3,8 @@ from app.utils.validators import validator_number
 from app.database.repositories.user_repository import (
     get_user_by_id_repo, 
     update_user_repo,
-    delete_user_repo)
+    delete_user_repo,
+    get_users_repo)
 
 def create_user_service(db, user):
 
@@ -43,3 +44,14 @@ def delete_user_service(db, user_id):
     user_delete_data = delete_user_repo(db=db, delete_data=delete_data)
 
     return user_delete_data
+
+
+
+def get_users_service(db, option):
+
+    if option == 0:
+        users_data = get_users_repo(db=db)
+        return users_data
+    else:
+        user = get_user_by_id_repo(db=db, id=option)
+        return user

@@ -26,6 +26,19 @@ def get_user_by_id_repo(db, id):
     return user
 
 
+def get_users_repo(db):
+
+    users_data = db.query(Usuario).all()
+
+    if not users_data:
+        HTTPException(
+            status_code=204,
+            detail='Não há usuários cadastrados'
+        )
+
+    return users_data
+
+
 def update_user_repo(db, user, update_data: dict):
 
     for key, value in update_data.items():
