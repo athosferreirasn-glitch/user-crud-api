@@ -13,3 +13,4 @@ class UserData(BaseModel):
     name: str | None = None
     email: EmailStr | None = None
     phone: str | None = None
+    password: str = Field(min_length=8, max_length=32, default=None) 

@@ -6,6 +6,8 @@ from app.database.repositories.user_repository import (
     update_user_repo,
     delete_user_repo,
     get_users_repo)
+from app.services.auth_service import verify_password
+
 
 def create_user_service(db, user):
 
@@ -21,6 +23,12 @@ def update_user_service(db, id_user, user_data):
     update_data = user_data.dict(
         exclude_unset=True
     )
+
+    if not verify_password(plain_password=user_data.password, hashed_password=user.password):
+        raise HTTPException(
+            status_code=401,
+            detail='Senha incorreta'
+        )
 
     if not update_data:
         raise HTTPException(status_code=400, detail='Nenhum dado enviado')

@@ -32,8 +32,16 @@ def update_user_router(
     db: Session = Depends(get_db)
 ):
 
+    hashed_pwd = get_password_hash(password=user_data.password)
 
-    return update_user_service(db=db, id_user=id_user, user_data=user_data)
+    user_data.password = hashed_pwd
+
+
+    update_user_service(db=db, id_user=id_user, user_data=user_data)
+
+    return {
+        'message': 'dados atualizados com sucesso'
+    }
 
 
 
@@ -43,7 +51,11 @@ def delete_user_router(
     db: Session = Depends(get_db)
 ):
 
-    return delete_user_service(db=db, user_id=user_id)
+    delete_user_service(db=db, user_id=user_id)
+
+    return {
+        'message': 'usuário deletado com sucesso'
+    }
 
 
 
