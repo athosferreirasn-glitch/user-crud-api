@@ -5,7 +5,8 @@ def create_user_repo(db, user):
     db_user = Usuario(
         nome=user.name,
         email=user.email,
-        phone=user.phone
+        phone=user.phone,
+        password=user.password
     )
 
     db.add(db_user)

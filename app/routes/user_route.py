@@ -3,6 +3,7 @@ from app.services.user_service import create_user_service, update_user_service, 
 from app.schemas.user_schemas import UserCreate, UserData
 from app.database.connection import get_db
 from sqlalchemy.orm import Session
+from app.services.auth_service import get_password_hash
 
 router = APIRouter(prefix='/user')
 
@@ -12,8 +13,16 @@ def create_user_router(
     user: UserCreate,
     db: Session = Depends(get_db) 
 ):
+
+    hashed_pwd = get_password_hash(password=user.password)
+
+    user.password = hashed_pwd
     
     create_user_service(db=db, user=user)
+
+    return {
+        'message': 'usuário criado e cadastrado com sucesso'
+    }
 
 
 @router.patch('/update_user/{id_user}')

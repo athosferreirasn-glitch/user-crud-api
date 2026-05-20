@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from app.utils.validators import validator_number
 from app.database.repositories.user_repository import (
+    create_user_repo,
     get_user_by_id_repo, 
     update_user_repo,
     delete_user_repo,

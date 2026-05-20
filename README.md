@@ -39,7 +39,7 @@ Possíveis melhorias:
 
 git clone <https://github.com/athosferreirasn-glitch/user-crud-api>
 
-cd CRUD_usuarios
+cd crud_users
 
 python -m venv .env
 
