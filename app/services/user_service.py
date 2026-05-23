@@ -6,7 +6,7 @@ from app.database.repositories.user_repository import (
     update_user_repo,
     delete_user_repo,
     get_users_repo)
-from app.services.auth_service import verify_password
+from app.security.password import verify_password
 
 
 def create_user_service(db, user):

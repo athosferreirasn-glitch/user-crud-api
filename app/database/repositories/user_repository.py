@@ -25,6 +25,15 @@ def get_user_by_id_repo(db, id):
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
 
     return user
+    
+
+def get_user_by_email_repo(db, email):
+    user = db.query(Usuario).filter(Usuario.email == email).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+
+    return user
 
 
 def get_users_repo(db):

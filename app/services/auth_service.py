@@ -1,11 +1,26 @@
-from passlib.context import CryptContext
-from typing import Any
-
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
-
-def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+from app.database.repositories.user_repository import get_user_by_email_repo
+from app.security.password import verify_password, get_password_hash
+from fastapi import HTTPException
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+def auth_login_service(db, user_data_login):
+
+    user = get_user_by_email_repo(db=db, email=user_data_login.email)
+
+    if not user:
+        raise HTTPException(
+            detail='Usuário não encontrado'
+        )
+
+    hashed_pwd = get_password_hash(password=user_data_login.password)
+
+    user_data_login.password = hashed_pwd
+
+    if not verify_password(plain_password=user_data_login.password, hashed_pwd=user.password):
+        raise HTTPException(
+            status_code=401,
+            detail='Senha incorreta'
+        )
+
+
+    

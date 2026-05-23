@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from app.services.user_service import create_user_service, update_user_service, delete_user_service, get_users_service
-from app.schemas.user_schemas import UserCreate, UserData
+from app.schemas.user_schemas import UserCreate, UserData, UserLogin
 from app.database.connection import get_db
 from sqlalchemy.orm import Session
-from app.services.auth_service import get_password_hash
+from app.security.password import get_password_hash
 
 router = APIRouter(prefix='/user')
 
@@ -85,3 +85,12 @@ def get_users_router(
         'email': users_data.email,
         'phone': users_data.phone
     }
+
+
+@router.post('/token/{email}/{password}')
+def login_for_acess_token(
+    email, 
+    password,
+    db: Session = Depends(get_db)):
+
+    user_data_login = UserLogin(email=email, password=password)
