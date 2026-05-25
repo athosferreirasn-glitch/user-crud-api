@@ -1,4 +1,5 @@
 from app.database.models import Usuario
+from fastapi import HTTPException
 
 
 def create_user_repo(db, user):
