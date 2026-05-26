@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, timezone
 import jwt
-from app.database.repositories.user_repository import get_user_by_id_repo
-from app.database.connection import get_db
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from fastapi import Depends
 
 
@@ -14,30 +13,30 @@ ACESS_TOKEN_EXPIRE_MINUTES = 30
 def create_acess_token(data: dict):
     to_encode = data.copy()
 
-    expire = datetime.utcnow() + timedelta(minutes=30)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=30)
 
-    to_encode.update({'exp': expire})
+    to_encode.update(
+        {"exp": expire}
+    )
 
-    encoded_jwt = jwt.encode(
+    return jwt.encode(
         to_encode,
         SECRET_KEY,
         algorithm=ALGORITHM
     )
 
-    return encoded_jwt
 
+def decode_token(token: str):
 
+    try:
+         return jwt.decode(
+            token,
+            SECRET_KEY,
+            algorithms=ALGORITHM
+        )
 
-def get_current_user(token, db: Session = Depends(get_db)):
+    except ExpiredSignatureError:
+        raise Exception('Token expiredo')
 
-    payload = jwt.decode(
-        token,
-        SECRET_KEY,
-        algorithms=[ALGORITHM]
-    )
-
-    user = get_user_by_id_repo(id=user.id, db=db)
-    
-    user.id = payload.get("id")
-
-    return user
+    except InvalidTokenError:
+        raise Exception('Token inválido')

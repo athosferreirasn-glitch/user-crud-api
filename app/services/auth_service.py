@@ -1,6 +1,8 @@
 from app.database.repositories.user_repository import get_user_by_email_repo
 from app.security.password import verify_password, get_password_hash
 from fastapi import HTTPException
+from app.security.jwt_handler import create_acess_token, decode_token
+
 
 
 def auth_login_service(db, user_data_login):
@@ -22,5 +24,11 @@ def auth_login_service(db, user_data_login):
             detail='Senha incorreta'
         )
 
+    token = create_acess_token(
+        data={
+            "sub": user.id,
+            "role": "user"
+        },
+    )
 
-    return user
+    return token
