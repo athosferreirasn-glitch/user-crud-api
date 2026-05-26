@@ -16,11 +16,11 @@ def auth_login_service(db, user_data_login):
 
     user_data_login.password = hashed_pwd
 
-    if not verify_password(plain_password=user_data_login.password, hashed_pwd=user.password):
+    if verify_password(plain_password=user_data_login.password, hashed_password=user.password):
         raise HTTPException(
             status_code=401,
             detail='Senha incorreta'
         )
 
 
-    
+    return user

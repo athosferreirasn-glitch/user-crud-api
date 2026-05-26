@@ -4,6 +4,8 @@ from app.schemas.user_schemas import UserCreate, UserData, UserLogin
 from app.database.connection import get_db
 from sqlalchemy.orm import Session
 from app.security.password import get_password_hash
+from app.services.auth_service import auth_login_service
+from app.security.jwt_handler import create_acess_token, get_current_user
 
 router = APIRouter(prefix='/user')
 
@@ -87,10 +89,26 @@ def get_users_router(
     }
 
 
-@router.post('/token/{email}/{password}')
+@router.post('/token')
 def login_for_acess_token(
-    email, 
-    password,
+    user_data_login: UserLogin,
     db: Session = Depends(get_db)):
 
-    user_data_login = UserLogin(email=email, password=password)
+    user = auth_login_service(db=db, user_data_login=user_data_login)
+
+    acess_token = create_acess_token(
+        data={
+            "sub": user.email,
+            "id": user.id
+        }
+    )
+
+    return {
+        "access_token": acess_token,
+        "token_type": "bearer"
+    }
+
+
+@router.get("/profile")
+def profile(current_user = Depends(get_current_user)):
+    return current_user

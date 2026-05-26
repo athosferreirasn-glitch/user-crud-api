@@ -1,5 +1,8 @@
 from datetime import datetime, timedelta, timezone
 import jwt
+from app.database.repositories.user_repository import get_user_by_id_repo
+from app.database.connection import get_db
+from fastapi import Depends
 
 
 
@@ -22,3 +25,19 @@ def create_acess_token(data: dict):
     )
 
     return encoded_jwt
+
+
+
+def get_current_user(token, db: Session = Depends(get_db)):
+
+    payload = jwt.decode(
+        token,
+        SECRET_KEY,
+        algorithms=[ALGORITHM]
+    )
+
+    user = get_user_by_id_repo(id=user.id, db=db)
+    
+    user.id = payload.get("id")
+
+    return user
