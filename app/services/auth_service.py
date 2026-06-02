@@ -8,7 +8,7 @@ from app.security.jwt_handler import create_acess_token, decode_token, ALGORITHM
 
 def auth_login_service(db, user_data_login):
 
-    user = get_user_by_email_repo(db=db, email=user_data_login.email)
+    user = get_user_by_email_repo(db=db, email=user_data_login.username)
 
     if not user:
         raise HTTPException(
@@ -43,7 +43,6 @@ def auth_autorization_request(token):
     try:
 
         payload = decode_token(token=token)
-        print(payload)
 
         return payload
 

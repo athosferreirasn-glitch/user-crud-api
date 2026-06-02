@@ -4,7 +4,6 @@ from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from fastapi import Depends, Header
 
 
-
 SECRET_KEY = "MSecKe&21022205"
 ALGORITHM = "HS256"
 ACESS_TOKEN_EXPIRE_MINUTES = 30
@@ -45,11 +44,4 @@ def decode_token(token: str):
 
 
 
-def header_auth(autorization: str = Header()):
-    from app.services.auth_service import auth_autorization_request
 
-    token = autorization.replace("Bearer", "")
-
-    if auth_autorization_request(token=token):
-
-        return {'token': token}
