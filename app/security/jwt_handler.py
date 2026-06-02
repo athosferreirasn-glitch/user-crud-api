@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
-from fastapi import Depends
+from fastapi import Depends, Header
 
 
 
@@ -29,14 +29,27 @@ def create_acess_token(data: dict):
 def decode_token(token: str):
 
     try:
-         return jwt.decode(
+        payload = jwt.decode(
             token,
             SECRET_KEY,
             algorithms=ALGORITHM
         )
 
+        return payload
+
     except ExpiredSignatureError:
-        raise Exception('Token expiredo')
+        raise Exception('Token expirado')
 
     except InvalidTokenError:
         raise Exception('Token inválido')
+
+
+
+def header_auth(autorization: str = Header()):
+    from app.services.auth_service import auth_autorization_request
+
+    token = autorization.replace("Bearer", "")
+
+    if auth_autorization_request(token=token):
+
+        return {'token': token}
