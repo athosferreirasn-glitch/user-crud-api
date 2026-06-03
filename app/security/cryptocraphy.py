@@ -1,33 +1,19 @@
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
-
-aes_key = get_random_bytes(24)
+AES_KEY = get_random_bytes(24)
 
 def encrypt_data(data):
-    global aes_key
-    cipher = AES.new(key=aes_key, mode=AES.MODE_EAX)
+    cipher = AES.new(AES_KEY, AES.MODE_EAX)
 
-    ciphertext = cipher.encrypt(data)
-    
+    ciphertext, tag = cipher.encrypt_and_digest(data)
 
-    return ciphertext
+    return cipher.nonce, tag, ciphertext
 
-def decrypt_data(data):
-    global aes_key
-    cipher = AES.new(key=aes_key, mode=AES.MODE_EAX)
 
-    nonce = cipher.nonce
-    
-    cipher = AES.new(key=aes_key, mode=AES.MODE_EAX, nonce=nonce)
-    plaintext = cipher.decrypt(data)
+def decrypt_data(nonce, tag, ciphertext):
+    cipher = AES.new(AES_KEY, AES.MODE_EAX, nonce=nonce)
+
+    plaintext = cipher.decrypt_and_verify(ciphertext, tag)
 
     return plaintext
-
-
-email = b'athosferreirasn@gmail.com'
-crypt = encrypt_data(email)
-print(crypt)
-print('---------------------------------')
-decrypt = decrypt_data(email)
-print(decrypt)
