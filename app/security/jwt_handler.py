@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from fastapi import Depends, Header
+from fastapi.security import OAuth2PasswordBearer
 
 
 SECRET_KEY = "MSecKe&21022205"
@@ -41,7 +42,4 @@ def decode_token(token: str):
 
     except InvalidTokenError:
         raise Exception('Token inválido')
-
-
-
 
