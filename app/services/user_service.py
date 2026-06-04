@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from app.utils.validators import validator_number
+from app.utils.validators import validator_number, validator_cpf
 from app.database.repositories.user_repository import (
     create_user_repo,
     get_user_by_id_repo, 
@@ -11,7 +11,23 @@ from app.security.password import verify_password
 
 def create_user_service(db, user):
 
+    users_data = get_users_repo(db=db)
+
+    if user in users_data:
+        raise HTTPException(
+            status_code=400,
+            detail='Dados informados já casdastrados'
+        )
+
     user.phone = validator_number(phone=user.phone)
+
+    verify_cpf = validator_cpf(cpf=user.cpf)
+
+    if not verify_cpf:
+        raise HTTPException(
+            status_code=400,
+            detail='Número de CPF inválido'
+        )
 
     create_user_repo(db=db, user=user)
 

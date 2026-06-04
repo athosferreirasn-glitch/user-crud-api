@@ -6,6 +6,7 @@ class UserCreate(BaseModel):
     name: str
     email: EmailStr
     phone: str
+    cpf: str = Field(min_length=11, max_length=11)
     password: str = Field(min_length=8, max_length=32)
 
 
@@ -13,6 +14,7 @@ class UserData(BaseModel):
     name: str
     email: EmailStr
     phone: str
+    cpf: int = Field(min_length=11, max_length=11)
     password: str = Field(min_length=8, max_length=32, default=None) 
 
 

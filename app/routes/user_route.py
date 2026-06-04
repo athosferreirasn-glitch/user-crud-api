@@ -43,12 +43,12 @@ def login_for_acess_token(
 def create_user_router(
     user: UserCreate,
     db: Session = Depends(get_db),
-    token: str = Depends(header_auth) 
+    # token: str = Depends(header_auth) 
 ):
 
-    if token:
+    # if token:
 
-        return {'message': 'função indisponível'}
+        # return {'message': 'função indisponível'}
 
     hashed_pwd = get_password_hash(password=user.password)
 

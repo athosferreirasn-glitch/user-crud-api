@@ -7,6 +7,7 @@ def create_user_repo(db, user):
         nome=user.name,
         email=user.email,
         phone=user.phone,
+        cpf=user.cpf,
         password=user.password
     )
 
