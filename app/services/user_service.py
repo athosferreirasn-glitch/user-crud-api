@@ -7,17 +7,12 @@ from app.database.repositories.user_repository import (
     delete_user_repo,
     get_users_repo)
 from app.security.password import verify_password
+from app.utils.utils import data_conversion_crypt
+from app.security.password import get_password_hash
+
 
 
 def create_user_service(db, user):
-
-    users_data = get_users_repo(db=db)
-
-    if user in users_data:
-        raise HTTPException(
-            status_code=400,
-            detail='Dados informados já casdastrados'
-        )
 
     user.phone = validator_number(phone=user.phone)
 
@@ -29,7 +24,13 @@ def create_user_service(db, user):
             detail='Número de CPF inválido'
         )
 
-    create_user_repo(db=db, user=user)
+    hashed_pwd = get_password_hash(password=user.password)
+
+    user.password = hashed_pwd
+
+    user_encrypt = data_conversion_crypt(data=user)
+
+    create_user_repo(db=db, user=user_encrypt)
 
 
 def update_user_service(db, id_user, user_data):

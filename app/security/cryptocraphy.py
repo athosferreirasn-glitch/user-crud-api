@@ -6,7 +6,9 @@ AES_KEY = get_random_bytes(24)
 def encrypt_data(data):
     cipher = AES.new(AES_KEY, AES.MODE_EAX)
 
-    ciphertext, tag = cipher.encrypt_and_digest(data)
+    data_bytes = data.encode("utf-8")
+
+    ciphertext, tag = cipher.encrypt_and_digest(data_bytes)
 
     return cipher.nonce, tag, ciphertext
 

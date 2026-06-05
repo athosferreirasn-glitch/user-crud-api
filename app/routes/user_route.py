@@ -3,7 +3,6 @@ from app.services.user_service import create_user_service, update_user_service, 
 from app.schemas.user_schemas import UserCreate, UserData, UserLogin
 from app.database.connection import get_db
 from sqlalchemy.orm import Session
-from app.security.password import get_password_hash
 from app.services.auth_service import auth_login_service
 from typing import Annotated
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -42,17 +41,8 @@ def login_for_acess_token(
 @router.post('/create_users')
 def create_user_router(
     user: UserCreate,
-    db: Session = Depends(get_db),
-    # token: str = Depends(header_auth) 
+    db: Session = Depends(get_db), 
 ):
-
-    # if token:
-
-        # return {'message': 'função indisponível'}
-
-    hashed_pwd = get_password_hash(password=user.password)
-
-    user.password = hashed_pwd
     
     create_user_service(db=db, user=user)
 

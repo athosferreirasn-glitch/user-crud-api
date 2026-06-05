@@ -1,22 +1,35 @@
-from pydantic import BaseModel, EmailStr, Field
+from types import SimpleNamespace
 import json
+from app.security.cryptocraphy import encrypt_data
 
 
 SENSITIVE_FIELDS = {
-    'email',
+    'cpf',
     'phone'
 }
 
 def data_conversion_crypt(data: object):
 
-    data_str = data.model_dump_json(indent=0)
+    data_json = data.model_dump_json(indent=0)
 
-    data_json = json.loads(data_str)
+    data_dict = json.loads(data_json)
 
     data_crypt = {}
 
-    for c, v in data_json.items():
+    for c, v in data_dict.items():
         if c in SENSITIVE_FIELDS:
-            data_crypt[c] = data_json[c]
+            data_crypt[c] = data_dict[c]
+        
+    for c, v in data_crypt.items():
 
-    return data_crypt.values()
+        if not v:
+            return False
+
+        nonce, tag, ciphertext = encrypt_data(data=v)
+
+        data_dict[c] = ciphertext
+
+    user = SimpleNamespace(**data_dict)
+
+    if user:
+        return user
