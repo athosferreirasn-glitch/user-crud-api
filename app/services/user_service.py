@@ -9,12 +9,25 @@ from app.database.repositories.user_repository import (
 from app.security.password import verify_password
 from app.utils.utils import data_conversion_crypt
 from app.security.password import get_password_hash
+import phonenumbers as ph
 
 
 
 def create_user_service(db, user):
 
     user.phone = validator_number(phone=user.phone)
+
+    if not user.phone:
+        raise HTTPException(
+            status_code=400,
+            detail='Número de telefone inválido'
+        )
+
+    if user.phone:
+        user.phone = ph.format_number(
+            user.phone,
+            ph.PhoneNumberFormat.E164
+        )
 
     verify_cpf = validator_cpf(cpf=user.cpf)
 

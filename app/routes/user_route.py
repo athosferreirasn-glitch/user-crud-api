@@ -107,7 +107,6 @@ def get_users_router(
                 users.append({
                     'name': user.nome,
                     'email': user.email,
-                    'phone': user.phone
                 })
 
             return users
@@ -115,7 +114,6 @@ def get_users_router(
         return {
             'name': users_data.nome,
             'email': users_data.email,
-            'phone': users_data.phone
         }
 
 

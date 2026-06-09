@@ -9,20 +9,13 @@ def validator_number(phone: str):
 
         if ph.is_valid_number(phone):
 
-            return ph.format_number(
-                phone,
-                ph.PhoneNumberFormat.E164
-            )
+            return True
         
-        raise HTTPException(
-            status_code=400,
-            detail='Número de telefone inválido'
-        )
+        return False
+        
+
     except:
-        raise HTTPException(
-            status_code=400,
-            detail='Número de telefone inválido'
-        )
+        return False
 
 
 
