@@ -8,10 +8,10 @@ from typing import Annotated
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 
-router = APIRouter(prefix='/user')
+router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="user/token"
+    tokenUrl="/token"
 )
 
 def header_auth(token: str = Depends(oauth2_scheme)):
