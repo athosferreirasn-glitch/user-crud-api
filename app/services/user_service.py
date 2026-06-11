@@ -15,18 +15,17 @@ import phonenumbers as ph
 
 def create_user_service(db, user):
 
-    user.phone = validator_number(phone=user.phone)
 
-    if not user.phone:
+    if not validator_number(phone=user.phone):
         raise HTTPException(
             status_code=400,
             detail='Número de telefone inválido'
         )
 
-    if user.phone:
+    if validator_number(phone=user.phone):
         user.phone = ph.format_number(
-            user.phone,
-            ph.PhoneNumberFormat.E164
+            numobj=ph.parse(number=user.phone, region="BR"),
+            num_format=ph.PhoneNumberFormat.NATIONAL
         )
 
     verify_cpf = validator_cpf(cpf=user.cpf)
