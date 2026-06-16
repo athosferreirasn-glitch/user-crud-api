@@ -1,5 +1,5 @@
 from app.database.repositories.user_repository import get_user_by_email_repo
-from app.security.password import verify_password, get_password_hash
+from app.security.password import verify_password
 from fastapi import HTTPException, Depends
 from app.security.jwt_handler import create_acess_token, decode_token, ALGORITHM
 

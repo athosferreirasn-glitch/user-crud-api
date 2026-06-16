@@ -6,9 +6,8 @@ from app.database.repositories.user_repository import (
     update_user_repo,
     delete_user_repo,
     get_users_repo)
-from app.security.password import verify_password
 from app.utils.utils import data_conversion_crypt
-from app.security.password import get_password_hash
+from app.security.password import get_data_hash, verify_password
 import phonenumbers as ph
 
 
@@ -36,9 +35,11 @@ def create_user_service(db, user):
             detail='Número de CPF inválido'
         )
 
-    hashed_pwd = get_password_hash(password=user.password)
+    user.password = get_data_hash(data=user.password)
 
-    user.password = hashed_pwd
+    user.hash_phone = get_data_hash(data=user.phone)
+
+    user.hash_cpf = get_data_hash(data=user.cpf)
 
     user_encrypt = data_conversion_crypt(data=user)
 

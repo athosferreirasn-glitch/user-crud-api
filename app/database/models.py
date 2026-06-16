@@ -11,5 +11,7 @@ class Usuario(Base):
     nome = Column(String(100), unique=False, nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     phone = Column(LargeBinary(225), nullable=False)
+    hash_phone = Column(String(225), unique=True, nullable=False)
     cpf = Column(LargeBinary(225), nullable=False)
+    hash_cpf = Column(String(225), unique=True, nullable=False)
     password = Column(String(225), unique=False, nullable=False)

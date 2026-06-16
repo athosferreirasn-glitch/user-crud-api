@@ -7,17 +7,25 @@ def create_user_repo(db, user):
         nome=user.name,
         email=user.email,
         phone=user.phone,
+        hash_phone=user.hash_phone,
         cpf=user.cpf,
+        hash_cpf=user.hash_cpf,
         password=user.password
     )
 
-    db.add(db_user)
+    try:
+        db.add(db_user)
 
-    db.commit()
+        db.commit()
 
-    db.refresh(db_user)
+        db.refresh(db_user)
 
-    return db_user
+        return db_user
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail="Dados ja cadastrados"
+        )
 
 
 def get_user_by_id_repo(db, id):
@@ -56,10 +64,16 @@ def update_user_repo(db, user, update_data: dict):
     for key, value in update_data.items():
         setattr(user, key, value)
 
-    db.commit()
-    db.refresh(user)
+    try:
+        db.commit()
+        db.refresh(user)
 
-    return user
+        return user
+    except Exception:
+        raise HTTPException(
+            status_code=400,
+            detail="Dados informados já foram cadastrados"
+        )
 
 
 

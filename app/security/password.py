@@ -4,15 +4,15 @@ from fastapi import HTTPException
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
-def get_password_hash(password: str) -> str:
+def get_data_hash(data: str) -> str:
 
-    if not password:
+    if not data:
         raise HTTPException(
             status_code=422,
-            detail='Senha inválida'
+            detail='Credenciais inválida'
         )
 
-    return pwd_context.hash(password)
+    return pwd_context.hash(data)
 
 
 def verify_password(plain_password, hashed_password) -> bool:
