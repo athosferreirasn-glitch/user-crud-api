@@ -1,5 +1,6 @@
 from app.database.models import Usuario
 from fastapi import HTTPException
+from sqlalchemy.exc import IntegrityError
 
 
 def create_user_repo(db, user):
@@ -21,18 +22,16 @@ def create_user_repo(db, user):
         db.refresh(db_user)
 
         return db_user
-    except Exception as e:
-        raise HTTPException(
-            status_code=400,
-            detail="Dados ja cadastrados"
-        )
+        
+    except IntegrityError:
+        return None
 
 
 def get_user_by_id_repo(db, id):
     user = db.query(Usuario).filter(Usuario.id == id).first()
 
     if not user:
-        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+        return None
 
     return user
     
@@ -41,8 +40,7 @@ def get_user_by_email_repo(db, email):
     user = db.query(Usuario).filter(Usuario.email == email).first()
 
     if not user:
-        raise HTTPException(status_code=404, detail="Usuário não encontrado")
-
+        return None
     return user
 
 
@@ -51,10 +49,7 @@ def get_users_repo(db):
     users_data = db.query(Usuario).all()
 
     if not users_data:
-        HTTPException(
-            status_code=204,
-            detail='Não há usuários cadastrados'
-        )
+        return None
 
     return users_data
 
@@ -70,11 +65,7 @@ def update_user_repo(db, user, update_data: dict):
 
         return user
     except Exception:
-        raise HTTPException(
-            status_code=400,
-            detail="Dados informados já foram cadastrados"
-        )
-
+        return None
 
 
 def delete_user_repo(db, delete_data):

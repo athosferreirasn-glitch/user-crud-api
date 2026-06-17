@@ -38,8 +38,8 @@ def decode_token(token: str):
         return payload
 
     except ExpiredSignatureError:
-        raise Exception('Token expirado')
+        return None
 
     except InvalidTokenError:
-        raise Exception('Token inválido')
+        return None
 
